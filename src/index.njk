@@ -1,0 +1,65 @@
+---
+layout: base.njk
+title: Upcoming Events
+showCustomEvents: false
+---
+
+<div class="events-root">
+
+  {% for ev in events %}
+  {% if (showCustomEvents or (ev.tags and "UC" in ev.tags)) and filters.eventType(ev.title) != "workshop" %}
+    {% set dateLabel = "" %}
+    {% if ev.event_starts_at %}
+      {% set dateLabel = filters.formatDate(ev.event_starts_at) ~ " · " ~ filters.formatTime(ev.event_starts_at) %}
+    {% endif %}
+
+    {% set img = null %}
+    {% if ev.thumbnails and ev.thumbnails.length %}
+      {% set img = ev.thumbnails[0].url %}
+    {% elif ev.image_url %}
+      {% set img = ev.image_url %}
+    {% endif %}
+
+    {% set evType = filters.eventType(ev.title) %}
+    <div class="event-card event-type-{{ evType }}">
+
+      {% if img %}
+        <div class="event-image">
+          <img src="{{ img }}" alt="{{ ev.title }}">
+        </div>
+      {% endif %}
+
+      <div class="event-card-body">
+        <span class="event-type-badge">{{ evType }}</span>
+        <h2 class="event-title">{{ ev.title }}</h2>
+
+        {% if dateLabel %}
+          <div class="event-date">📅 {{ dateLabel }} — {{ ev.venue }}</div>
+        {% endif %}
+
+        <p class="event-excerpt">
+          {{ filters.shortText(ev.excerpt or ev.full_content, 180) }}
+        </p>
+
+        <div class="event-buttons">
+          <a class="btn btn-primary" href="{{ ev.url }}" target="_blank">Buy Ticket</a>
+          <a class="btn btn-ghost" href="{{ ev.learn_more }}" target="_blank">Learn More</a>
+        </div>
+      </div>
+
+    </div>
+  {% endif %}
+  {% endfor %}
+
+  <div class="event-card promo-card">
+    <div class="event-card-body">
+      <h2 class="event-title">Stay in the loop</h2>
+      <p class="event-excerpt">MTG Reroll is Bangalore's community hub for Magic: The Gathering events. Follow us for updates on drafts, tournaments, and casual nights.</p>
+      <div class="event-buttons">
+        <a class="btn btn-primary" href="{{ social.instagram }}" target="_blank">Follow on Instagram</a>
+        <a class="btn btn-ghost" href="{{ social.whatsapp }}" target="_blank">Join WhatsApp</a>
+      </div>
+    </div>
+  </div>
+
+</div>
