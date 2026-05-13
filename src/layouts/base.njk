@@ -7,75 +7,19 @@
   <link rel="stylesheet" href="/assets/events.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Archivo:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 
 <body>
-  <div class="page-motifs" aria-hidden="true">
-    <img class="motif motif-1"  src="/assets/icons/lightning.png"     alt="">
-    <img class="motif motif-2"  src="/assets/icons/starburst.png"     alt="">
-    <img class="motif motif-3"  src="/assets/icons/star-purple.png"   alt="">
-    <img class="motif motif-4"  src="/assets/icons/diamond.png"       alt="">
-    <img class="motif motif-5"  src="/assets/icons/star-4point.png"   alt="">
-    <img class="motif motif-6"  src="/assets/icons/moon.png"          alt="">
-    <img class="motif motif-7"  src="/assets/icons/star-green.png"    alt="">
-    <img class="motif motif-8"  src="/assets/icons/ring-pink.png"     alt="">
-    <img class="motif motif-9"  src="/assets/icons/star-outline.png"  alt="">
-    <img class="motif motif-10" src="/assets/icons/arc-blue.png"      alt="">
-    <img class="motif motif-11" src="/assets/icons/arc-green.png"     alt="">
-    <img class="motif motif-12" src="/assets/icons/arc-pink.png"      alt="">
-    <img class="motif motif-13" src="/assets/icons/pacman-orange.png" alt="">
-    <img class="motif motif-14" src="/assets/icons/pacman-yellow.png" alt="">
-    <img class="motif motif-15" src="/assets/icons/blob-blue.png"     alt="">
-    <img class="motif motif-16" src="/assets/icons/blob-cream.png"    alt="">
-  </div>
-
-  <div class="foreground-motifs" aria-hidden="true">
-    <img class="fg-motif fg-motif-lightning" src="/assets/icons/lightning.png"     alt="">
-    <img class="fg-motif fg-motif-pacman"    src="/assets/icons/pacman-yellow.png" alt="">
-  </div>
-
   <div class="page-hero">
-    <img class="hero-logo" src="/assets/logo.png" alt="MTG Reroll">
+    <h1 class="hero-title">MAGIC THE GATHERING</h1>
 
-    <div class="social-row">
-      <a class="social-icon" href="{{ social.whatsapp }}" target="_blank">
-        <img src="https://cdn.simpleicons.org/whatsapp/25D366" alt="WhatsApp">
-      </a>
-      <a class="social-icon" href="{{ social.instagram }}" target="_blank">
-        <img src="https://cdn.simpleicons.org/instagram/E4405F" alt="Instagram">
-      </a>
-      <a class="social-icon" href="{{ social.youtube }}" target="_blank">
-        <img src="https://cdn.simpleicons.org/youtube/FF0000" alt="YouTube">
-      </a>
-      <a class="social-icon" href="{{ social.gmail }}" target="_blank">
-        <img src="https://cdn.simpleicons.org/gmail/FF0000" alt="Gmail">
-      </a>
-    </div>
-
-    <hr>
-    <p class="tagline">Hi!👋 <br> Bangalore's MTG community hub. <br>Find events, drafts, and more.</p>
+    <p class="tagline">The only (as far as we know) MTG group in Bangalore!<br>Beginners and veterans welcome!</p>
     <h2>UPCOMING EVENTS👇</h2>
   </div>
 
   <main>
     {% if events.length > 0 %}
-      <div class="event-key">
-        <div class="event-key-item">
-          <span class="event-key-dot dot-show"></span>
-          <div>
-            <strong>SHOW</strong>
-            <p>Competitive or structured event</p>
-          </div>
-        </div>
-        <div class="event-key-item">
-          <span class="event-key-dot dot-jam"></span>
-          <div>
-            <strong>JAM</strong>
-            <p>Casual play, beginner friendly</p>
-          </div>
-        </div>
-      </div>
       {{ content | safe }}
     {% else %}
       <div class="empty-state">
@@ -86,6 +30,8 @@
     {% endif %}
   </main>
 
+  <div id="card-overlay"></div>
+
   <footer class="footer">
     built with love by <a href="https://instagram.com/heresmohit" target="_blank">MG</a>
   </footer>
@@ -94,5 +40,87 @@
     window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
   </script>
   <script defer src="/_vercel/insights/script.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      var overlay = document.getElementById('card-overlay');
+      var focused = null;
+
+      function focusCard(card) {
+        var from = card.getBoundingClientRect();
+        card.classList.add('is-focused');
+        var to = card.getBoundingClientRect();
+
+        var dx = from.left - to.left;
+        var dy = from.top  - to.top;
+        var scaleX = from.width  / to.width;
+        var scaleY = from.height / to.height;
+
+        card.style.transition = 'none';
+        card.style.transform  = 'translate(' + dx + 'px, ' + dy + 'px) rotate(0deg) scale(' + scaleX + ', ' + scaleY + ')';
+
+        card.getBoundingClientRect();
+        card.classList.add('is-flipping');
+        card.style.transition = '';
+        card.style.transform  = 'rotate(0deg)';
+
+        card.addEventListener('transitionend', function cleanup() {
+          card.classList.remove('is-flipping');
+          card.removeEventListener('transitionend', cleanup);
+        });
+
+        overlay.classList.add('is-visible');
+        focused = card;
+      }
+
+      function dismissCard() {
+        if (!focused) return;
+        var card = focused;
+        focused = null;
+
+        // 1. READ — current centered position
+        var from = card.getBoundingClientRect();
+
+        // 2. Remove focused state — card snaps back to fan in DOM
+        card.classList.remove('is-focused');
+
+        // 3. READ — where it will naturally rest in the fan
+        var to = card.getBoundingClientRect();
+
+        // 4. Hold it at the centered position visually
+        var dx = from.left - to.left;
+        var dy = from.top  - to.top;
+        var scaleX = from.width  / to.width;
+        var scaleY = from.height / to.height;
+
+        card.style.transition = 'none';
+        card.style.transform  = 'translate(' + dx + 'px, ' + dy + 'px) scale(' + scaleX + ', ' + scaleY + ')';
+
+        card.getBoundingClientRect();
+        card.classList.add('is-flipping');
+        card.style.transition = '';
+        card.style.transform  = '';
+
+        card.addEventListener('transitionend', function cleanup() {
+          card.classList.remove('is-flipping');
+          card.style.transition = '';
+          card.style.transform  = '';
+          card.removeEventListener('transitionend', cleanup);
+        });
+
+        overlay.classList.remove('is-visible');
+      }
+
+      document.querySelectorAll('.social-card').forEach(function (card) {
+        card.addEventListener('click', function (e) {
+          if (card.classList.contains('is-focused')) return; // second tap navigates
+          e.preventDefault();
+          if (focused && focused !== card) dismissCard();
+          focusCard(card);
+        });
+      });
+
+      overlay.addEventListener('click', dismissCard);
+    });
+  </script>
 </body>
 </html>

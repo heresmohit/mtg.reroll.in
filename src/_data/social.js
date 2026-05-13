@@ -1,6 +1,6 @@
 export default {
-  instagram: "https://instagram.com/mtg.reroll.in",
-  whatsapp: "",
-  youtube: "",
-  gmail: "mailto:mtgreroll@gmail.com"
+  instagram: "https://www.instagram.com/mtg_bangalore/",
+  whatsapp: "https://forum.reroll.in/whatsapp-mtg",
+  underline: "https://underline.center/calender",
+  reroll: "https://forum.reroll.in",
 };

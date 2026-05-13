@@ -21,45 +21,94 @@ showCustomEvents: false
     {% endif %}
 
     {% set evType = filters.eventType(ev.title) %}
-    <div class="event-card event-type-{{ evType }}">
+    <div class="mtg-card event-type-{{ evType }}">
+      <div class="mtg-card-inner">
 
-      {% if img %}
-        <div class="event-image">
-          <img src="{{ img }}" alt="{{ ev.title }}">
+        <div class="mtg-title-bar">
+          <span class="mtg-card-name">{{ ev.title }}</span>
         </div>
-      {% endif %}
 
-      <div class="event-card-body">
-        <span class="event-type-badge">{{ evType }}</span>
-        <h2 class="event-title">{{ ev.title }}</h2>
-
-        {% if dateLabel %}
-          <div class="event-date">📅 {{ dateLabel }} — {{ ev.venue }}</div>
-        {% endif %}
-
-        <p class="event-excerpt">
-          {{ filters.shortText(ev.excerpt or ev.full_content, 180) }}
-        </p>
-
-        <div class="event-buttons">
-          <a class="btn btn-primary" href="{{ ev.url }}" target="_blank">Buy Ticket</a>
-          <a class="btn btn-ghost" href="{{ ev.learn_more }}" target="_blank">Learn More</a>
+        <div class="mtg-art-box">
+          {% if img %}
+            <img src="{{ img }}" alt="{{ ev.title }}">
+          {% else %}
+            <div class="mtg-art-placeholder"></div>
+          {% endif %}
         </div>
+
+        <div class="mtg-type-line">
+          {% if dateLabel %}{{ dateLabel }}{% else %}Upcoming Event{% endif %}
+        </div>
+
+        <div class="mtg-text-box">
+          <p class="mtg-flavour-text">{{ filters.shortText(ev.excerpt or ev.full_content, 160) }}</p>
+          <div class="mtg-buttons">
+            <a class="btn btn-primary" href="{{ ev.url }}" target="_blank">Buy Ticket</a>
+            <a class="btn btn-ghost" href="{{ ev.learn_more }}" target="_blank">Learn More</a>
+          </div>
+        </div>
+
       </div>
-
     </div>
   {% endif %}
   {% endfor %}
 
-  <div class="event-card promo-card">
-    <div class="event-card-body">
-      <h2 class="event-title">Stay in the loop</h2>
-      <p class="event-excerpt">MTG Reroll is Bangalore's community hub for Magic: The Gathering events. Follow us for updates on drafts, tournaments, and casual nights.</p>
-      <div class="event-buttons">
-        <a class="btn btn-primary" href="{{ social.instagram }}" target="_blank">Follow on Instagram</a>
-        <a class="btn btn-ghost" href="{{ social.whatsapp }}" target="_blank">Join WhatsApp</a>
+  <div class="social-cards-row">
+
+    <a class="social-card social-card-reroll" href="{{ social.reroll }}" target="_blank">
+      <div class="mtg-card-inner">
+        <div class="mtg-title-bar">
+          <span class="mtg-card-name">Reroll 🎲</span>
+        </div>
+        <div class="mtg-text-box">
+          <p class="mtg-flavour-text">Board games, D&D, and more — our community hub for all tabletop games.</p>
+          <span class="btn btn-primary">Forum</span>
+        </div>
       </div>
-    </div>
+    </a>
+
+    <a class="social-card social-card-instagram" href="{{ social.instagram }}" target="_blank">
+      <div class="mtg-card-inner">
+        <div class="mtg-title-bar">
+          <img src="https://cdn.simpleicons.org/instagram/E4405F" alt="" class="social-card-icon">
+          <span class="mtg-card-name">Instagram</span>
+        </div>
+        <div class="mtg-text-box">
+          <p class="mtg-flavour-text">Follow us for event announcements, highlights, and community updates.</p>
+          <span class="btn btn-primary">Follow</span>
+        </div>
+      </div>
+    </a>
+
+    <a class="social-card social-card-underline" href="{{ social.underline }}" target="_blank">
+      <div class="mtg-card-inner">
+        <div class="mtg-title-bar">
+          <span class="mtg-card-name">Underline</span>
+          <img src="https://cdn.simpleicons.org/linktree/8B5CF6" alt="" class="social-card-icon">
+        </div>
+        <div class="mtg-art-box social-card-art">
+          <img src="https://underline.center/uploads/default/original/1X/fa3aa3aa7f1fa6a624fc878105340deb1881033e.png" alt="Underline Center">
+        </div>
+        <div class="mtg-text-box">
+          <p class="mtg-flavour-text">Browse and register for all our events on Underline Center.</p>
+          <span class="btn btn-primary">Visit</span>
+        </div>
+      </div>
+    </a>
+
+    <a class="social-card social-card-whatsapp" href="{{ social.whatsapp }}" target="_blank">
+      <div class="mtg-card-inner">
+        <div class="mtg-title-bar">
+          <span class="mtg-card-name">WhatsApp</span>
+          <img src="https://cdn.simpleicons.org/whatsapp/25D366" alt="" class="social-card-icon">
+        </div>
+        <div class="mtg-text-box">
+          <p class="mtg-flavour-text">Join the group to stay in the loop on events, pickups, and trades.</p>
+          <span class="btn btn-primary">Join</span>
+        </div>
+      </div>
+    </a>
+
   </div>
 
 </div>

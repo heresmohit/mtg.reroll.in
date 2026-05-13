@@ -1,17 +1,13 @@
-# ILxUC Calendar
+# mtg.reroll.in
 
-Front-end for Improvlore's event listing. Displays upcoming shows pulled from [UC-ingest](https://github.com/heresmohit/UC-ingest), a separate pipeline that fetches from underline.center and publishes a static `events.json` daily.
+Front-end for MTG Reroll's event listing. Displays upcoming Magic: The Gathering events in Bangalore.
 
-This repo has no fetching logic — it just consumes that JSON at build time and renders it.
+Built with [Eleventy](https://www.11ty.dev/). No backend — events are consumed from a JSON feed at build time.
 
 ## Dev
 
 ```bash
 npm install
-npm run dev    # local server
+npm run dev    # local server at http://localhost:8080
 npm run build  # one-off build
 ```
-
-## Custom events / toggling
-
-Custom events are managed in the ingest repo via its `custom.json`. To toggle them on/off here, flip `showCustomEvents` at the top of `src/index.njk`.
