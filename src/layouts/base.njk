@@ -19,15 +19,7 @@
   </div>
 
   <main>
-    {% if events.length > 0 %}
-      {{ content | safe }}
-    {% else %}
-      <div class="empty-state">
-        <h2>No upcoming events</h2>
-        <p>join our socials in the meantime!</p>
-        <p class="warning">if you think this is an error please contact us.</p>
-      </div>
-    {% endif %}
+    {{ content | safe }}
   </main>
 
   <div id="card-overlay"></div>
