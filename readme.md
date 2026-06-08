@@ -1,13 +1,19 @@
 # mtg.reroll.in
 
-Front-end for MTG Reroll's event listing. Displays upcoming Magic: The Gathering events in Bangalore.
+> [!WARNING]
+> **Deprecated — no longer maintained or deployed.**
+> Automatic deployments are disabled (see [`vercel.json`](vercel.json)) and the
+> build no longer fetches the live events feed; it renders a static fallback
+> only. This repository is kept for archival reference.
 
-Built with [Eleventy](https://www.11ty.dev/). No backend — events are consumed from a JSON feed at build time.
+Front-end for MTG Reroll's event listing. Displayed upcoming Magic: The Gathering events in Bangalore.
+
+No backend — events were consumed from a JSON feed at build time.
 
 ## Dev
 
 ```bash
 npm install
-npm run dev    # local server at http://localhost:8080
+npm run dev    # local server
 npm run build  # one-off build
 ```

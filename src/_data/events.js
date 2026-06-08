@@ -1,5 +1,3 @@
-import eleventyFetch from "@11ty/eleventy-fetch";
-
 // Next upcoming Saturday at 5pm IST. Recomputed at build time so the backup
 // event never looks stale. Returns the date label (e.g. "13 Jun") in IST.
 function nextSaturdayLabel() {
@@ -47,7 +45,7 @@ const FALLBACK_EVENTS = [
     ],
     dateLine: `Saturday, ${nextSaturdayLabel()}, 5pm`,
     slug: "magic-the-gathering-with-reroll-board-games",
-    // Buy Ticket falls back to social.district in the template when url is absent.
+    url: "https://www.district.in/events/magic-the-gathering-with-reroll-board-games-buy-tickets",
     learn_more:
       "https://underline.center/t/magic-the-gathering-with-reroll-board-games/130",
     venue: "Underline Center, Indiranagar",
@@ -56,13 +54,8 @@ const FALLBACK_EVENTS = [
 ];
 
 export default async function () {
-  try {
-    const events = await eleventyFetch(
-      "https://github.com/heresmohit/UC-ingest/releases/download/mtg-latest/events.json",
-      { duration: "1h", type: "json" }
-    );
-    return Array.isArray(events) && events.length > 0 ? events : FALLBACK_EVENTS;
-  } catch {
-    return FALLBACK_EVENTS;
-  }
+  // Project deprecated: the live UC-ingest feed is no longer polled at build
+  // time. Always serve the static fallback so any rebuild stays self-contained
+  // and makes no external network calls.
+  return FALLBACK_EVENTS;
 }
